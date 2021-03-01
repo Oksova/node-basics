@@ -1,22 +1,3 @@
 {
-  "contacts": [
-    {
-      "id": "50d57ede-594f-435d-8ce7-f589cc61b02d",
-      "name": "Gabriel",
-      "email": "user3@mail.com",
-      "phone": "+95451531231651"
-    },
-    {
-      "id": "8d01031b-053c-4e52-9f2d-c81705eed651",
-      "name": "Harry",
-      "email": "user4@mail.com",
-      "phone": "+58465161551"
-    },
-    {
-      "id": "391d2f8d-6a2d-44bc-b86f-956ec1cb9515",
-      "name": "Bingo",
-      "email": "f@mail.com",
-      "phone": "+358548554565"
-    }
-  ]
+  "contacts": []
 }
