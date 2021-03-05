@@ -1,36 +1,44 @@
 // const fs = require('fs/promises')
 // const contacts = require('./contacts.json')
 
-const db = require('./db')
-const { v4: uuid } = require('uuid')
+// const db = require('./db')
+// const { ObjectID } = require('mongodb')
+
+// const getCollection = async (db, name) => {
+//   const client = await db
+//   const collection = await client.db().collection('contacts')
+//   return collection
+// }
+
+const Contact = require('./schemas/contact')
 
 const listContacts = async () => {
-  return db.get('contacts').value()
+  const results = await Contact.find({})
+  return results
 }
 
 const getContactById = async (contactId) => {
-  return db.get('contacts').find({ id: contactId }).value()
-}
-
-const removeContact = async (contactId) => {
-  const [record] = db.get('contacts').remove({ id: contactId }).write()
-  return record
+  const results = await Contact.findOne({ _id: contactId })
+  return results
 }
 
 const addContact = async (body) => {
-  const id = uuid()
-  const record = {
-    id,
-    ...body,
-  }
-  db.get('contacts').push(record).write()
-  return record
+  const result = await Contact.create(body)
+  return result
 }
 
 const updateContact = async (contactId, body) => {
-  const record = db.get('contacts').find({ id: contactId }).assign(body).value()
-  db.write()
-  return record.id ? record : null
+  const result = await Contact.findByIdAndUpdate(
+    { _id: contactId },
+    { ...body },
+    { new: true },
+  )
+  return result
+}
+
+const removeContact = async (contactId) => {
+  const result = await Contact.findByIdAndRemove({ _id: contactId })
+  return result
 }
 
 module.exports = {
