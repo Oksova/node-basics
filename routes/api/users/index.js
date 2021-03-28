@@ -15,5 +15,6 @@ router.patch(
   [guard, upload.single('avatar'), validateUploadAvatar],
   userControllers.avatars,
 )
+router.get('/verify/:token', userControllers.verify)
 
 module.exports = router
