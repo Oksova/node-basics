@@ -7,7 +7,7 @@ const Jimp = require('jimp')
 const { HttpCode } = require('../helpers/constans')
 const EmailService = require('../services/email')
 const createFolderIsExist = require('../helpers/create-dir')
-const {nanoid} = require('nanoid')
+const { nanoid } = require('nanoid')
 require('dotenv').config()
 const SECRET_KEY = process.env.JWT_SECRET
 
@@ -25,8 +25,12 @@ const register = async (req, res, next) => {
     }
     const verifyToken = nanoid()
     const emailService = new EmailService(process.env.NODE_ENV)
-    const emailService.sendEmail(verifyToken, email, name)
-    const newUser = await Users.create(req.body)
+    await emailService.sendEmail(verifyToken, email, name)
+    const newUser = await Users.create({
+      ...req.body,
+      verify: false,
+      verifyToken,
+    })
     return res.status(HttpCode.CREATED).json({
       status: 'success',
       code: HttpCode.CREATED,
@@ -150,7 +154,7 @@ const saveAvatarToStatic = async (req) => {
 
 const verify = async (req, res, next) => {
   try {
-    const user = Users.findByVerifyToken(req.params.token)
+    const user = await Users.findByVerifyToken(req.params.token)
     if (user) {
       await Users.updateVerifyToken(user.id, true, null)
       return res.json({
